@@ -1,0 +1,32 @@
+usingGroup: test
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/supermarket?useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+#    static-path-pattern: /webapp/**
+#  resources:
+#    static-locations: /webapp/
+
+mybatis:
+  mapper-locations: classpath:mapping/*Mapper.xml
+  type-aliases-package: com.graduation.supermarket.Entity
+
+server:
+  port: 8081
+  context-path: /
+

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>购物结算</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+        <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
+        <style type="text/css">
+
+            .container{
+                padding: 20px;
+            }
+            .redcolor{
+                color: red;
+            }
+            .title{
+                text-align: center;
+                position: relative;
+                font-weight: normal;
+                margin-bottom: 30px;
+                color: #666;
+            }
+            .title:after,.title:before{
+                content: '';
+                position: absolute;
+                top: 50%;
+                width: 45%;
+                background: #999;
+                height: 1px;
+            }
+            .title:before{
+                left: 0;
+            }
+            .title:after{
+                right: 0;
+            }
+            .tab thead{
+                background-color: #999;
+                color: #fff;
+            }
+            .tab thead th{
+                padding: 10px 0;
+                font-weight: normal;
+            }
+            .tab td{
+                text-align: center;
+                padding: 10px 0;
+            }
+            .goods{
+                width: 40%;
+                position: relative;
+            }
+            .goods-left{
+                width: 20%;
+                float: left;
+            }
+            .goods-right {
+                width: 78%;
+                float: right;
+                text-align: left;
+            }
+            .goods-right .tip{
+                color: #999;
+                position: absolute;
+                bottom: 10px;
+                font-size: 12px;
+            }
+            .num input{
+                width: 50px;
+                text-align: center;
+            }
+            .num a{
+                color: #333;
+                text-decoration: none;
+            }
+
+            .bodyTr{
+                border: 2px solid red;
+                height: 100px;
+            }
+
+            #elMain{
+                width: 90%;
+                margin: 0px 5% 0px;
+            }
+
+            #elHeader{
+                height: 60px;
+                background-color: aqua;
+                line-height: 60px;
+                font-size: 20px;
+            }
+
+            #tablefooter{
+                height: 60px;
+                line-height: 60px;
+                text-align: right;
+                font-size: 24px;
+                margin-right: 10px;
+            }
+
+            .el-footer{
+                height: 120px !important;
+                width: 90%;
+                margin: 0px 5% 0px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <el-container>
+                <el-header id="elHeader">
+                    <el-row>
+                        <el-col :offset="4" :span="7">
+                            开始时间：{{ open }}
+                        </el-col>
+                        <el-col :offset="4" :span="7">
+                            结束时间：{{ close }}
+                        </el-col>
+                    </el-row>
+                </el-header>
+                <el-main id="elMain">
+                    <div class="container">
+                        <h2 class="title">购物车</h2>
+                        <table class="tab" width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr>
+                                <th colspan="2">商品信息</th>
+                                <th style="width: 14%;">商品金额</th>
+                                <th style="width: 14%;">商品数量</th>
+                                <th style="width: 14%;">总金额</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="item in productList" class="bodyTr">
+                                <td style="width: 5%;"></td>
+                                <td class="goods">
+                                    <img :src="item.productImage" class="goods-left"/>
+                                    <div class="goods-right">
+                                        <p>{{item.productName}}</p>
+                                    </div>
+                                </td>
+                                <td>{{item.productPrice | formatMoney}}</td>
+                                <td class="num">&nbsp;
+                                    <input type="text" v-model="item.productQuentity" disabled />&nbsp;&nbsp;
+                                </td>
+                                <td class="redcolor">{{item.productPrice*item.productQuentity | formatMoney}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div id="tablefooter">
+                            <span >总计：{{totalMoney | formatMoney}}</span>元
+                        </div>
+
+                        <div id="tablefooter">
+                        <el-row>
+                            <el-button type="success" v-on:click="pay">立即支付</el-button>
+                        </el-row>
+                        </div>
+                        <h3 style="text-align: center">请扫描二维码付款</h3>
+                        <div align="center" style="margin-top: 20px;">
+                            <div id="code" style="width: 240px;height: 240px;margin: 0px auto;"></div>
+                        </div>
+                    </div>
+                </el-main>
+<!--                <el-footer>-->
+<!--                    <el-row style="height: 100%;width: 100%; margin-top: 20px">-->
+<!--                        <el-col  :span="9" style="text-align: left; margin-left: 5%">-->
+<!--                            <span style="height: 120px;line-height: 120px;font-size: 24px">请扫描二维码付款</span>-->
+<!--                        </el-col>-->
+<!--                    </el-row>-->
+<!--                </el-footer>-->
+            </el-container>
+
+		</div>
+
+<!--        <input type="text" id="orderNo" readonly="readonly" />-->
+<!--        <span>温馨提示:支付完成后，稍等片刻</span>-->
+    </body>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        var interval //计时器
+        new Vue({
+            el: '#app',
+            data(){
+                return {
+                    totalMoney:0,
+                    productList:[],
+                    checkAllFlag:false,
+                    open:"",
+                    close:"",
+                    orderId:""
+                }
+            },
+            filters:{
+                formatMoney: function (value) {
+                    return "￥ "+value;
+                }
+            },
+            mounted(){
+
+                axios.get("http://127.0.0.1:8081/shopping/customer")
+                    .then(response=>{
+                        this.totalMoney=0;
+                        let shoppingArray=response.data;
+                        //this.productList=[];
+                        console.log(shoppingArray.length);
+                        for( let i=0;i<shoppingArray.length-1;i++ )
+                        {
+                            let product={
+                                productName:shoppingArray[i].goodsName,
+                                productPrice:shoppingArray[i].goodsPrice,
+                                productQuentity:shoppingArray[i].goodsNumber,
+                                productImage:shoppingArray[i].imgUrl,
+                                parts:[
+                                    {
+                                        partsName:"无"
+                                    }
+                                ]
+                            };
+                            this.totalMoney=this.totalMoney+((shoppingArray[i].goodsPrice)*(shoppingArray[i].goodsNumber));
+                            this.productList.push(product);
+                        }
+                        this.open=shoppingArray[shoppingArray.length-1].goodsName;
+                        this.close=shoppingArray[shoppingArray.length-1].imgUrl;
+                    });
+            },
+            methods:{
+                //支付，生成订单
+                pay(){
+                      this.orderId = null
+                    $.ajax({
+                        url: 'http://localhost:8081/order/pay',
+                        type: 'get',
+                        cache: false,
+                        data: {},
+                        dataType: 'json',
+                        success: function (result) {
+                            this.orderId = result
+                            $.ajax({
+                                url: 'http://localhost:8081/wx/pay/wxPayQrcode',
+                                type: 'post',
+                                cache: false,
+                                async: false,
+                                data: {
+                                    orderId: this.orderId
+                                },
+                                dataType: 'json',
+                                success: function (result) {
+                                    if (result.code == 200) {
+                                        //生成二维码
+                                        $("#code").qrcode({
+                                            render: "canvas", //table方式
+                                            width: 240, //宽度
+                                            height: 240, //高度
+                                            text: result.object.code_url //任意内容
+                                        });
+                                        clearInterval(interval);
+                                        interval = setInterval(function () {
+                                            axios.get('http://localhost:8081/wx/pay/wxPaySelectOrder', {
+                                                params: {
+                                                    orderNo: result.object.orderNo
+                                                }
+                                            })
+                                                .then(response => {
+                                                    if (response.data.code == 200) {
+                                                        clearInterval(interval)
+                                                        // alert("支付成功，跳转成功页面");
+                                                        location.href = 'http://localhost:8081/order/setStatus?orderId='+result.object.orderNo
+                                                    } else {
+                                                        console.log(response.data.msg);
+                                                    }
+                                                })
+                                        }, 2000);
+
+                                    } else {
+                                        alert("发生异常");
+                                    }
+                                }, error: function () {
+                                    alert("请求服务器超时");
+                                }
+                            });
+                            // this.wxPay(this.orderId)
+                            }
+                        });
+                    },
+
+                wxPay(orderId){
+                    $.ajax({
+                        url: 'http://localhost:8081/wx/pay/wxPayQrcode',
+                        type: 'post',
+                        cache: false,
+                        async: false,
+                        data: {
+                            orderId:orderId
+                        },
+                        dataType: 'json',
+                        success: function(result) {
+                            if (result.code == 200) {
+                                //生成二维码
+                                $("#code").qrcode({
+                                    render: "canvas", //table方式
+                                    width: 240, //宽度
+                                    height:240, //高度
+                                    text: result.object.code_url //任意内容
+                                });
+                                clearInterval(interval);
+                                interval = setInterval(function () {
+                                    axios.get('http://localhost:8081/wx/pay/wxPaySelectOrder',{
+                                        params:{
+                                            orderNo:result.object.orderNo
+                                        }
+                                    })
+                                        .then(response=>{
+                                            if (response.data.code == 200) {
+                                                clearInterval(interval)
+                                                // alert("支付成功，跳转成功页面");
+                                                location.href='http://localhost:8081/success.jsp'
+                                            }else{
+                                                console.log(response.data.msg);
+                                            }
+                                        })
+                                },2000);
+
+                            }else{
+                                alert("发生异常");
+                            }
+                        },error: function() {
+                            alert("请求服务器超时");
+                        }
+                    });
+                }
+
+            }
+        })
+
+    </script>
+</html>
