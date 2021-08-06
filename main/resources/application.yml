@@ -1,7 +1,7 @@
-usingGroup: test
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://47.94.92.76:3306/face_recognition?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT&&useSSL=false
     url: jdbc:mysql://127.0.0.1:3306/supermarket?useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: 123456

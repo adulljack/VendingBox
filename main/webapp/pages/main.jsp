@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>IMUST-货柜管理系统</title>
+<title>货柜管理系统</title>
 <meta name="description" content="AdminLTE2定制版">
 <meta name="keywords" content="AdminLTE2定制版">
 
@@ -147,14 +147,14 @@
 		</div>
 		<!-- 内容区域 /-->
 
-		<!-- 底部导航 -->
-		<footer class="main-footer">
-		<div class="pull-right hidden-xs">
-			<b>Version</b> 1.0.8
-		</div>
-		<strong>Copyright &copy; 2017-2021 内蒙古科技大学.
-		</strong> All rights reserved. </footer>
-		<!-- 底部导航 /-->
+<%--		<!-- 底部导航 -->--%>
+<%--		<footer class="main-footer">--%>
+<%--		<div class="pull-right hidden-xs">--%>
+<%--			<b>Version</b> 1.0.8--%>
+<%--		</div>--%>
+<%--		<strong>Copyright &copy; 2017-2021 内蒙古科技大学.--%>
+<%--		</strong> All rights reserved. </footer>--%>
+<%--		<!-- 底部导航 /-->--%>
 
 	</div>
 

@@ -1,20 +1,18 @@
-package com.graduation.supermarket.Analyse;
+package com.graduation.supermarket.Controller;
 
-
-import com.graduation.supermarket.Controller.ImgController;
-import javafx.scene.shape.HLineTo;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+import org.springframework.stereotype.Controller;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ObjectAnalyse
-{
-    public List<Integer> uploadFile(String fileName) {
+
+@Controller
+public class ImgController1 {
+    public static List<Integer> uploadFile(String fileName) {
         String result="";
         try {
             // 换行符
@@ -92,72 +90,6 @@ public class ObjectAnalyse
         }
         List<Integer> integerList = new ArrayList<>();
         if( result.length()>2 ) {
-            result = result.substring(18, result.length() - 19);
-            System.out.println(result);
-            String[] arr = result.split(",");
-            if (result.length() > 0) {
-                for (String x : arr) {
-                    integerList.add(x.charAt(0) - '0');
-                }
-            }
-        }
-        return integerList;
-    }
-
-
-
-
-
-
-
-    public HashMap<Integer, Integer> objectDetect(String image)
-    {
-        System.out.println("detect start");
-//        List<Integer> integerList=getObjectAnalyse(image);
-        List<Integer> integerList=uploadFile(image);
-//        List<Integer> integerList = Arrays.asList(0,0,1,1, 2, 3);
-        HashMap<Integer,Integer> result=new HashMap<>();
-        for( int x:integerList ){
-            if( result.containsKey(x) ){
-                int value=result.get(x);
-                result.replace(x,value,value+1);
-            }
-            else{
-                result.put(x,1);
-            }
-        }
-        return result;
-    }
-
-    public List<Integer> getObjectAnalyse(String imageName){
-        String result="";
-        String cmd = "cmd /c python yolov3_infer.py "+imageName;
-        String dir = new File("").getAbsolutePath();
-        dir = dir + "\\py";
-        File directory = new File(dir);
-        try {
-            final Process process = Runtime.getRuntime().exec(cmd, null, directory);
-            BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line = null;
-            try {
-                while ((line = in.readLine()) != null) {
-                    result+=line;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        List<Integer> integerList = new ArrayList<>();
-        if( result.length()>2 ) {
             result = result.substring(1, result.length() - 2);
             System.out.println(result);
             String[] arr = result.split(". ");
@@ -167,5 +99,9 @@ public class ObjectAnalyse
             }
         }
         return integerList;
+    }
+    public static void main(String args[]) {
+        uploadFile("C:\\huogui\\web_flask_YOLO_Vending\\productDetection\\open.jpg");
+        uploadFile("C:\\huogui\\web_flask_YOLO_Vending\\productDetection\\realease.jpg");
     }
 }

@@ -41,9 +41,11 @@ public class HardwareController {
             System.out.println(openTime);
             shoppingRepository.deleteAll();
             shelfGoodsRepository.deleteAll();
-            imwrite("py/open.jpg", CameraThread.getImage());
+            imwrite("py/open1.jpg", CameraThread.getImage());
             ObjectAnalyse objectAnalyse = new ObjectAnalyse();
-            HashMap<Integer, Integer> goods = objectAnalyse.objectDetect("open.jpg");
+
+
+            HashMap<Integer, Integer> goods = objectAnalyse.objectDetect("py/open1.jpg");
             for (Map.Entry<Integer, Integer> entry : goods.entrySet()) {
                 ShelfGoods shelfGoods = new ShelfGoods(entry.getKey() , entry.getValue());
                 shelfGoodsRepository.save(shelfGoods);
@@ -53,9 +55,9 @@ public class HardwareController {
             System.out.println("realease");
             this.closeTime=System.currentTimeMillis();
             System.out.println(closeTime);
-            imwrite("py/realease.jpg", CameraThread.getImage());
+            imwrite("py/realease1.jpg", CameraThread.getImage());
             ObjectAnalyse objectAnalyse = new ObjectAnalyse();
-            HashMap<Integer, Integer> goods = objectAnalyse.objectDetect("realease.jpg");
+            HashMap<Integer, Integer> goods = objectAnalyse.objectDetect("py/realease1.jpg");
             List<ShelfGoods> shelfGoodsList = shelfGoodsRepository.getAll();
             if( purchaseError(shelfGoodsList,goods) ){
                 String cmd = "explorer error.html";
@@ -77,7 +79,8 @@ public class HardwareController {
                         shoppingRepository.save(shopping);
                     }
                 }
-                String cmd = "cmd /c start chrome file:///C:/huogui/%E6%9C%80%E5%90%8E%E7%BB%99%E7%9A%84%E6%BA%90%E7%A0%81/supermarket/index.html";
+                String cmd = "cmd /c start chrome http://localhost:8081/index.html";
+//                String cmd = "cmd /c start chrome file:///C:/huogui/%E6%9C%80%E5%90%8E%E7%BB%99%E7%9A%84%E6%BA%90%E7%A0%81/supermarket/index.html";
                 try {
                     final Process process = Runtime.getRuntime().exec(cmd);
                 } catch (IOException e) {

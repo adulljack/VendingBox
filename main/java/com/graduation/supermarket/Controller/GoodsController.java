@@ -27,7 +27,7 @@ public class GoodsController {
     public String findAll(@PathVariable(value = "current",required = false) Integer current, @PathVariable(value = "size",required = false) Integer size, HttpServletRequest request){
         if (StringUtils.isEmpty(current) && StringUtils.isEmpty(size)) {
             current = 1;
-            size = 2;
+            size = 5;
         }
         List<Goods> goodsList = goodsService.findAll(current, size);
         PageInfo<Goods> pageInfo = new PageInfo<>(goodsList);
@@ -49,7 +49,7 @@ public class GoodsController {
             goods.setImgUrl(imgStr);
             goodsService.updateById(goods);
         }
-        return "redirect:/goods/findAll/1/2";
+        return "redirect:/goods/findAll/1/5";
     }
 
     //上传图片
@@ -75,7 +75,7 @@ public class GoodsController {
         for (Integer id : ids) {
             goodsService.deleteById(id);
         }
-        return "redirect:/goods/findAll/1/2";
+        return "redirect:/goods/findAll/1/5";
     }
 
     @RequestMapping("selectLike")
@@ -83,7 +83,7 @@ public class GoodsController {
 
         if (StringUtils.isEmpty(current) && StringUtils.isEmpty(size)) {
             current = 1;
-            size = 2;
+            size = 5;
         }
         List<Goods> goods = goodsService.selectLike(word,current, size);
         PageInfo<Goods> pageInfo = new PageInfo<>(goods);

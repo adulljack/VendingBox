@@ -17,7 +17,7 @@ public interface GoodsDao {
     })
     List<Goods> findAll();
 
-    @Update("update goods set goods_name=#{goodsId},img_url=#{imgUrl},price=#{price},number=#{number} where goods_id=#{goodsId}")
+    @Update("update goods set goods_name=#{goodsName},img_url=#{imgUrl},price=#{price},number=#{number} where goods_id=#{goodsId}")
     @Results({
             @Result(id=true,property = "goodsId",column = "goods_id"),
             @Result(property = "goodsName",column = "goods_name"),

@@ -32,7 +32,7 @@
 				<ul class="treeview-menu">
 
 					<li id="system-setting1"><a
-							href="${pageContext.request.contextPath}/goods/findAll/1/2">
+							href="${pageContext.request.contextPath}/goods/findAll/1/5">
 						<i class="fa fa-circle-o"></i> 商品列表
 					</a></li>
 					<li id="system-setting2"><a
