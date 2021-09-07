@@ -57,9 +57,9 @@ public class OrderController {
         //生成订单
         orderService.save(order);
         //库存减1
-        for (Shopping shopping : shoppingList) {
-            goodsService.updateNumById(shopping.getGoodsId(),shopping.getNumber());
-        }
+//        for (Shopping shopping : shoppingList) {
+//            goodsService.updateNumById(shopping.getGoodsId(),shopping.getNumber());
+//        }
         return order.getId();
     }
 

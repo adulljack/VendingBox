@@ -61,5 +61,5 @@ public interface GoodsDao {
     List<Goods> selectLike(String word);
 
     @Update("update goods set number=number-#{num} where goods_id=#{goodsId}")
-    void updateNum(@Param("goodsId") int goodsId,@Param("num") int num);
+    void updateNum(@Param("goodsId") int goodsId, @Param("num") int num);
 }

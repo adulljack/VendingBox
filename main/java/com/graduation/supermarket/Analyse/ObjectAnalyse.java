@@ -2,19 +2,31 @@ package com.graduation.supermarket.Analyse;
 
 
 import com.graduation.supermarket.Controller.ImgController;
+import com.graduation.supermarket.face.util.GsonUtils;
 import javafx.scene.shape.HLineTo;
+import org.apache.jasper.tagplugins.jstl.core.Url;
+import org.bytedeco.javacpp.annotation.Properties;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
+@Component
 public class ObjectAnalyse
 {
+
+
+    public static URL uploadImgUrl;
+    @Value("${url.uploadImgUrl}")
+    public void setUploadImgUrl(URL uploadImgUrl){ObjectAnalyse.uploadImgUrl=uploadImgUrl;}
     public List<Integer> uploadFile(String fileName) {
+
         String result="";
         try {
             // 换行符
@@ -23,7 +35,11 @@ public class ObjectAnalyse
             // 定义数据分隔线
             String BOUNDARY = "========7e31753050e48";
             // 服务器的域名
-            URL url = new URL("http://127.0.0.1:8011/vending/upload_pic");
+//            URL url = new URL("http://127.0.0.1:8011/vending/upload_pic");
+            URL url =  uploadImgUrl;
+
+
+            System.out.println(url);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             // 设置为POST情
             conn.setRequestMethod("POST");

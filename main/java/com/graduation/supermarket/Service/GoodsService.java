@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface GoodsService {
 
-    List<Goods> findAll(int current,int size);
+    List<Goods> findAll(int current, int size);
 
     void updateById(Goods goods);
 
@@ -19,5 +19,5 @@ public interface GoodsService {
 
     List<Goods> selectLike(String word, Integer current, Integer size);
 
-    void updateNumById(int goodsId,int num);
+    void updateNumById(int goodsId, int num);
 }

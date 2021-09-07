@@ -30,3 +30,7 @@ server:
   port: 8081
   context-path: /
 
+url:
+  uploadImgUrl: http://127.0.0.1:8011/vending/upload_pic
+
+
